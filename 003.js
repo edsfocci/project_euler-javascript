@@ -12,7 +12,25 @@ var suite = new Benchmark.Suite;
 var NUM = 4;
 var NUM = 13195;
 var NUM = 600851475143;
-suite.add('Simple iterations', function() {
+suite.add('Simple iterations, proving divisors are prime', function() {
+  var num = NUM;
+
+  var isPrime;
+
+  for (var divisor = 2; num > 1; divisor++) {
+    // Prove divisor is prime
+    isPrime = true;
+    for (var i = 2; isPrime && i < divisor; i++) {
+      if (divisor % i === 0) isPrime = false;
+    }
+
+    if (num % divisor === 0) {
+      //console.log(divisor);
+      while (num % divisor === 0) num /= divisor;
+    }
+  }
+})
+.add('Simple iterations', function() {
   var num = NUM;
 
   for (var divisor = 2; num > 1; divisor++) {
@@ -53,7 +71,7 @@ suite.add('Simple iterations', function() {
 .on('complete', function() {
   console.log('Fastest is ' + this.filter('fastest').pluck('name'));
 })
-//.run();
+.run();
 
 var num = NUM;
 

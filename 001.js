@@ -42,7 +42,7 @@ suite.add('Simple for loop', function() {
 .on('complete', function() {
   console.log('Fastest is ' + this.filter('fastest').pluck('name'));
 })
-//.run();
+.run();
 
 var sum = 0;
 
