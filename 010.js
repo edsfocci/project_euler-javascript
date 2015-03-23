@@ -5,7 +5,7 @@ The sum of the primes below 10 is 2 + 3 + 5 + 7 = 17.
 
 Find the sum of all the primes below two million.
 */
-BELOW_NUM = 2000000;
+BELOW_NUM = 2e6;
 var sum = 0;
 var isPrime;
 

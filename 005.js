@@ -110,32 +110,32 @@ suite.add('Using object', function() {
 })
 .run();
 
-  var findPrime = function(number) {
-    var prime;
+var findPrime = function(number) {
+  var prime;
 
-    for (var possiblePrime = number-1; possiblePrime > 1; possiblePrime--) {
-      if (number % possiblePrime == 0) {
-        prime = findPrime(possiblePrime);
-        break;
-      }
-    }
-
-    return prime || number;
-  }
-
-  var product = MAX_NUM;
-  var currentNum, prime;
-
-  for (var num = MAX_NUM-1; num > 1; num--) {
-    currentNum = num;
-
-    while (product % num !== 0) {
-      prime = findPrime(num);
-
-      currentNum /= prime;
-      product *= prime;
+  for (var possiblePrime = number-1; possiblePrime > 1; possiblePrime--) {
+    if (number % possiblePrime == 0) {
+      prime = findPrime(possiblePrime);
+      break;
     }
   }
 
-  console.log(product);
+  return prime || number;
+}
+
+var product = MAX_NUM;
+var currentNum, prime;
+
+for (var num = MAX_NUM-1; num > 1; num--) {
+  currentNum = num;
+
+  while (product % num !== 0) {
+    prime = findPrime(num);
+
+    currentNum /= prime;
+    product *= prime;
+  }
+}
+
+console.log(product);
 
