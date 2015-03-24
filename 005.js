@@ -44,6 +44,42 @@ suite.add('Using object', function() {
 
   //console.log(product);
 })
+.add('Using object, complex iterations', function() {
+  var totalFactorsCount = {};
+  var currentFactorsCount, currentNum;
+
+  for (var num = MAX_NUM; num > 1; num--) {
+    currentFactorsCount = {};
+
+    currentNum = num;
+    for (var i = 2; (currentNum / i) >= i; i++) {
+      while (currentNum % i === 0) {
+        if (currentFactorsCount[i] === undefined) {
+          currentFactorsCount[i] = 1;
+        } else {
+          currentFactorsCount[i] += 1;
+        }
+        currentNum /= i;
+      }
+    }
+
+    if (currentNum > 1) currentFactorsCount[currentNum] = 1;
+
+    for (var key in currentFactorsCount) {
+      if (totalFactorsCount[key] === undefined ||
+        totalFactorsCount[key] < currentFactorsCount[key]) {
+        totalFactorsCount[key] = currentFactorsCount[key];
+      }
+    }
+  }
+
+  var product = 1;
+  for (var key in totalFactorsCount) {
+    product *= Math.pow(key, totalFactorsCount[key]);
+  }
+
+  //console.log(product);
+})
 .add('(Tail?) Recursion', function() {
   var findPrime = function(number) {
     var possiblePrime = number - 1;

@@ -11,12 +11,10 @@ var isPrime;
 
 for (var possiblePrime = 2; primeCount < TARGET_COUNT; possiblePrime++) {
   isPrime = true;
-  for (var i = 2; (possiblePrime / i) >= i; i++) {
-    if (possiblePrime % i === 0) {
-      isPrime = false;
-      break;
-    }
+  for (var i = 2; isPrime && (possiblePrime / i) >= i; i++) {
+    if (possiblePrime % i === 0) isPrime = false;
   }
+
   if (isPrime) primeCount++;
   if (primeCount === TARGET_COUNT) console.log(possiblePrime);
 }
