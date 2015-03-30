@@ -268,7 +268,16 @@ var A = function(n) { return y(1, n) };
 
 var longNumDigits = powString(2, 60).length;
 
-console.log(A(1e12));
+//console.log(A(4));
 //console.log(addNumString("-" + powString(2, 60), A(10)));
 //console.log(addNumString(-999, -9999));
+/*
+console.log(A(1));
+console.log(A(1e1));
+console.log(A(1e2));
+console.log(A(1e3));
+console.log(A(1e4));
+console.log(A(1e5));
+*/
+console.log(A(1e6));
 
