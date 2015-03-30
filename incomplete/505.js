@@ -28,17 +28,17 @@ var powString = function(num, exp) {
   return prodString;
 };
 
-var addNumString = function(x, y) {
+var maxNumString = function(x, y) {
   var a = x.toString();
   var b = y.toString();
+
+  if (a === b) return a;
 
   var negaArray = [0, 0];
   var detectNegs = function(string, idx) {
     if (string[0] === "-") {
       negaArray[idx] = 1;
-      var stringArray = string.split("");
-      stringArray.shift();
-      return stringArray.join("");
+      return string.slice(1, string.length);
     }
 
     return string;
@@ -47,28 +47,118 @@ var addNumString = function(x, y) {
   a = detectNegs(a, 0);
   b = detectNegs(b, 1);
 
-  var length = Math.max(a.length, b.length);
+  if (negaArray[0] + negaArray[1] === 1) {
+    if (negaArray[1] === 1) {
+      return a;
+    } else {
+      return b;
+    }
+  }
 
-  while (a.length < length) a = "0" + a;
-  while (b.length < length) b = "0" + b;
+  var compareAbsValues = function(e, f) {
+    var minLength;
+    if (a.length === b.length) {
+      for (var i = 0; i < a.length; i++) {
+        if (a[i] > b[i]) {
+          return a;
+        } else if (a[i] < b[i]) {
+          return b;
+        }
+      }
+    } else {
+      minLength = Math.min(a.length, b.length);
+
+      if (a.length > minLength) {
+        return a;
+      } else {
+        return b;
+      }
+    }
+  }
+
+  var c, d;
+  c = compareAbsValues(a, b);
+  if (a === c) {
+    d = b;
+  } else {
+    d = a;
+  }
+
+  if (negaArray[0] + negaArray[1] === 0) return c;
+  return d;
+};
+
+var addNumString = function(x, y) {
+  var a = x.toString();
+  var b = y.toString();
+
+  var negaArray = [0, 0];
+  var detectNegs = function(string, idx) {
+    if (string[0] === "-") {
+      negaArray[idx] = 1;
+      return string.slice(1, string.length);
+    }
+
+    return string;
+  }
+
+//  console.log(a);
+//  console.log(b);
+  a = detectNegs(a, 0);
+  b = detectNegs(b, 1);
+//  console.log(a);
+//  console.log(b);
+
+  var maxLength = Math.max(a.length, b.length);
 
   var carryOver = 0;
   var sumString = "";
   var result;
 
   if (negaArray[0] + negaArray[1] === 1) {
-    var c, d, e, f;
-    if (negaArray[1] === 1) {
-      c = a;
-      d = b;
-    } else {
-      c = b;
-      d = a;
-    }
+    if (a === b) return "0";
 
-    for (var index = length-1; index >= 0; index--) {
-      e = parseInt(c[index]) + carryOver;
+    var c, d, e, f, minLength, startDiff, endDiff;
+    if (a.length === b.length) {
+      minLength = a.length;
+      endDiff = 0;
+
+      for (var i = 0; i < a.length; i++) {
+        if (a[i] > b[i]) {
+          c = a;
+          d = b;
+          break;
+        } else if (a[i] < b[i]) {
+          c = b;
+          d = a;
+          break;
+        }
+        minLength--;
+      }
+
+      startDiff = a.length - minLength;
+      minLength = a.length;
+//      console.log(startDiff);
+    } else {
+      minLength = Math.min(a.length, b.length);
+      startDiff = 0;
+      endDiff = maxLength - minLength;
+
+      if (a.length > minLength) {
+        c = a;
+        d = b;
+      } else {
+        c = b;
+        d = a;
+      }
+    }
+//    console.log(c);
+//    console.log(d);
+
+    for (var index = minLength-1; index >= 0 + startDiff; index--) {
+      e = parseInt(c[index + endDiff]) + carryOver;
       f = parseInt(d[index]);
+
       if (e < f) {
         e += 10;
         carryOver = -1;
@@ -78,8 +168,34 @@ var addNumString = function(x, y) {
       result = e - f;
       sumString = result.toString() + sumString;
     }
+
+    var digitsLeft = "";
+
+    if (carryOver !== 0) {
+      var digitsLeftStart = endDiff - 1;
+      var notZero = digitsLeftStart;
+      while (c[notZero] === "0") notZero--;
+      digitsLeft = c.slice(0 + startDiff, notZero);
+      digitsLeft += (parseInt(c[notZero]) + carryOver).toString();
+      for (var i = 0; i < digitsLeftStart - notZero; i++) digitsLeft += "9";
+    } else {
+      digitsLeft = c.slice(0, -minLength);
+    }
+    sumString = digitsLeft + sumString;
+    while (sumString[0] === "0")
+      sumString = sumString.slice(1, sumString.length);
+
+    if (negaArray[0] === 1 && a === c) {
+      sumString = "-" + sumString;
+    } else if (negaArray[1] === 1 && b === c) {
+      sumString = "-" + sumString;
+    }
+
   } else {
-    for (var index = length-1; index >= 0; index--) {
+    while (a.length < maxLength) a = "0" + a;
+    while (b.length < maxLength) b = "0" + b;
+
+    for (var index = maxLength-1; index >= 0; index--) {
       result = parseInt(a[index]) + parseInt(b[index]);
       result += carryOver;
       sumString = (result % 10).toString() + sumString;
@@ -88,12 +204,13 @@ var addNumString = function(x, y) {
 
     if (carryOver > 0) sumString = carryOver.toString() + sumString;
     if (negaArray[0] === 1) return "-" + sumString;
-    return sumString;
   }
+//  console.log(sumString);
+  return sumString;
 };
 
 var x = function(a) {
-  var k;
+  var k, result;
 
   switch(a) {
     case 0:
@@ -103,24 +220,55 @@ var x = function(a) {
     default:
       if (a % 2 === 0) {
         k = a / 2;
-        return (3 * x(k)) + (2 * x(Math.floor(k / 2)));
+        result = (3 * x(k)) + (2 * x(Math.floor(k / 2)));
+
+        if (result.toString().length < longNumDigits-1) return result;
+
+        var finalResult = result.toString();
+        while (finalResult[0] !== "-") {
+          result = finalResult;
+          finalResult = addNumString(result, "-" + powString(2, 60));
+        }
       } else{
         k = (a - 1) / 2;
-        return (2 * x(k)) + (3 * x(Math.floor(k / 2)));
+        result = (2 * x(k)) + (3 * x(Math.floor(k / 2)));
+
+        if (result.toString().length < longNumDigits-1) return result;
+
+        var finalResult = result.toString();
+        while (finalResult[0] !== "-") {
+          result = finalResult;
+          finalResult = addNumString(result, "-" + powString(2, 60));
+        }
       }
   }
+
+  return result;
 };
 
 var y = function(k, n) {
   if (k >= n) return x(k);
 
-  var result = -1 - Math.max(y((2 * k), n), y(((2 * k) + 1), n));
+  var result;
+  var possTerm1 = y((2 * k), n);
+  var possTerm2 = y(((2 * k) + 1), n);
+
+  if (possTerm1.toString().length < longNumDigits-1 &&
+    possTerm2.toString().length < longNumDigits-1) {
+    result = -1 - Math.max(possTerm1, possTerm2);
+  } else {
+    result =
+      addNumString(-1, "-" + maxNumString(possTerm1, possTerm2));
+  }
+
+  return addNumString(powString(2, 60), result);
 };
 
 var A = function(n) { return y(1, n) };
 
-//console.log(A(10));
-//console.log(addNumString(999, 9999));
-//var a = -1;
-//console.log(a.toString());
+var longNumDigits = powString(2, 60).length;
+
+console.log(A(1e12));
+//console.log(addNumString("-" + powString(2, 60), A(10)));
+//console.log(addNumString(-999, -9999));
 
