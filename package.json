@@ -1,0 +1,18 @@
+{
+  "name": "project_euler-javascript",
+  "version": "0.0.0",
+  "dependencies": {
+    "benchmark": "^2.1.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/edsfocci/project_euler-javascript.git"
+  },
+  "bugs": {
+    "url": "https://github.com/edsfocci/project_euler-javascript/issues"
+  },
+  "homepage": "https://github.com/edsfocci/project_euler-javascript#readme"
+}
